@@ -112,7 +112,7 @@ public class Programa {
 					int op1 = sc.nextInt();
 					sc.nextLine();
 					while(op1 != 3) {
-						//Concertar pesquisa do nome de cliente, só está aceitando um
+						//Concertar pesquisa do nome de cliente, só está aceitando um nome
 						System.out.println("--Comprar filme--");
 						System.out.print("Insira o nome do cliente: ");
 						String nome = sc.nextLine();
