@@ -31,6 +31,8 @@ public class Filme {
 	}
 
 	
-	
+	public String toString() {
+		return nome + " -- Classificação indicativa: " + classificacao + " anos.";
+	}
 
 }
