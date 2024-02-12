@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.Scanner;
 
 import entidades.Cliente;
@@ -16,9 +17,12 @@ public class Programa {
 		Locale.setDefault(Locale.US);
 		Scanner sc = new Scanner(System.in);
 		
-		Filme filme;
+		Filme filme = null;
+		Cliente cliente = null;
+		
 		List<Filme> filmes = new ArrayList<>();
 		List<Cliente> clientes = new ArrayList<>();
+		
 
 		// Menu
 		System.out.println("--Sistema da Locadora de Filmes IgaraTexas--");
@@ -75,7 +79,7 @@ public class Programa {
 					String celular = sc.nextLine();
 					System.out.println();
 
-					Cliente cliente = new Cliente(nome, idade, sexo, cpf, celular);
+					cliente = new Cliente(nome, idade, sexo, cpf, celular);
 
 					System.out.println("Endereço: ");
 					System.out.print("Rua ou Avenida: ");
@@ -117,11 +121,18 @@ public class Programa {
 						System.out.print("Insira o nome do cliente: ");
 						String nome = sc.nextLine();
 						for(Cliente c : clientes) {
-							String[] primeiroNome = c.getNome().split(" ");
-							boolean comp = nome.equalsIgnoreCase(primeiroNome[0]);
-							boolean comp1 = nome.equalsIgnoreCase(c.getNome());
+							
+							//Função Lambda para filtrar o primeiro nome de cada objeto 'Cliente' da lista 'clientes'.
+							String primeiroNomeCliente = clientes.stream()
+							        .map(Cliente::getNome)
+							        .map(nomeCliente -> nomeCliente.split(" ")[0])
+							        .filter(primeiroNome -> nome.equalsIgnoreCase(primeiroNome))
+							        .findFirst().orElse(null);
+							
+							boolean comp = nome.equalsIgnoreCase(primeiroNomeCliente);//Comparar só o primeiro nome
+							boolean comp1 = nome.equalsIgnoreCase(c.getNome());//Compara o nome todo
 							if(comp == true || comp1 == true) {
-								int idade = c.getIdade();
+								int idade = cliente.getIdade();
 								
 								
 							}else {
@@ -152,6 +163,12 @@ public class Programa {
 				op = 1;
 				System.out.println();
 				sc.nextLine();
+			} catch(ArrayIndexOutOfBoundsException e) {
+				System.out.println("Entrada de dados incorreta --- " + e.getMessage());
+				System.out.println("Pressione qualquer tecla para continuar!");
+				sc.nextLine();
+				op = 1;
+				System.out.println();
 			}
 
 		}
