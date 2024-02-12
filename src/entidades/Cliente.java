@@ -82,6 +82,20 @@ public class Cliente {
 	public void setCelular(String celular) {
 		this.celular = celular;
 	}
+	
+	public String toString() {
+		String sexoMF = null;
+		if(this.sexo == 'M' || this.sexo == 'm') {
+			sexoMF = "Masculino";
+		}else if(this.sexo == 'F' || this.sexo == 'f') {
+			sexoMF = "Feminino";
+		}
+		return "Nome: " + nome + "\n" 
+				+ "Idade: " + idade + " anos \n"
+				+ "Sexo: " + sexoMF + "\n"
+				+ "CPF: " + cpf + "\n"
+				+ "Celular: " + celular;
+	}
 
 
 	

@@ -19,6 +19,10 @@ public class ContratoDeVenda {
 	
 	public ContratoDeVenda() {
 	}
+	
+	public ContratoDeVenda(Double precoTotal) {
+		this.precoTotal = precoTotal;
+	}
 
 	public ContratoDeVenda(Double precoTotal, LocalDate dataAtual) {
 		this.precoTotal = precoTotal;
