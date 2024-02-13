@@ -5,7 +5,11 @@ import java.time.LocalDate;
 public class ProcessoDeVenda {
 	
 	Pagamento pagamento;
+	
 
+	public ProcessoDeVenda() {	
+	}
+	
 	public ProcessoDeVenda(Pagamento pagamento) {
 		this.pagamento = pagamento;
 	}
@@ -20,6 +24,15 @@ public class ProcessoDeVenda {
 			contrato.getParcelas().add(new Parcela(dataVencimento, valor));
 		}
 
+	}
+	
+	public void processarAluguel(ContratoDeVenda contrato, int dias) {
+		double valorAluguel = contrato.getPrecoTotal() * 0.05;
+		
+		for(int i = 1; i <= dias; i++) {
+			LocalDate dataVencimento = contrato.getDataAtual().plusDays(i);
+			contrato.getAluguel().add(new Aluguel(dataVencimento, valorAluguel));
+		}
 	}
 	
 	public double atrasoNaDevolução(ContratoDeVenda contrato, int diasAtrasados) {

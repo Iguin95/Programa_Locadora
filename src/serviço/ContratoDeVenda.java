@@ -16,6 +16,7 @@ public class ContratoDeVenda {
 	private LocalDate dataAtual;
 	
 	List<Parcela> parcelas = new ArrayList<>();
+	List<Aluguel> aluguel = new ArrayList<>();
 	
 	public ContratoDeVenda() {
 	}
@@ -50,5 +51,10 @@ public class ContratoDeVenda {
 		return parcelas;
 	}
 
+	public List<Aluguel> getAluguel() {
+		return aluguel;
+	}
+
+	
 
 }

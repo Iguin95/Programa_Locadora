@@ -1,6 +1,5 @@
 package aplicacao;
 
-
 import java.time.LocalDate;
 
 import java.util.ArrayList;
@@ -13,6 +12,8 @@ import java.util.Scanner;
 import entidades.Cliente;
 import entidades.Endereco;
 import entidades.Filme;
+import excecao.Excecao;
+import serviço.Aluguel;
 import serviço.Caixa;
 import serviço.ContratoDeVenda;
 import serviço.Nubank;
@@ -30,10 +31,10 @@ public class Programa {
 		Cliente cliente = null;
 		ContratoDeVenda cdv = null;
 		ProcessoDeVenda pdv = null;
-		
+
 		LocalDate agora = LocalDate.now();
 		Double precoTotal = null;
-		
+
 		List<Filme> filmes = new ArrayList<>();
 		List<Cliente> clientes = new ArrayList<>();
 
@@ -120,13 +121,13 @@ public class Programa {
 					Integer classificacao = sc.nextInt();
 
 					filme = new Filme(nome, classificacao);
-					
+
 					System.out.print("Valor do filme: ");
 					precoTotal = sc.nextDouble();
-					
+
 					cdv = new ContratoDeVenda(precoTotal);
 					filme = new Filme(nome, classificacao, cdv);
-					
+
 					filmes.add(filme);
 
 					// Venda/Aluguel
@@ -136,106 +137,185 @@ public class Programa {
 					int op1 = sc.nextInt();
 					sc.nextLine();
 					while (op1 != 3) {
-						
-						System.out.println("--Comprar filme--");
-						System.out.print("Insira o nome do cliente: ");
-						String nome = sc.nextLine();
-						for (Cliente c : clientes) {
+						if (op1 == 1) {
+							System.out.println("--Comprar filme--");
+							System.out.print("Insira o nome do cliente: ");
+							String nome = sc.nextLine();
+							for (Cliente c : clientes) {
 
-							/* Função Lambda para filtrar o primeiro nome de cada objeto 'Cliente' da lista 'clientes'.*/ 
-							String primeiroNomeCliente = clientes.stream().map(Cliente::getNome)
-									.map(nomeCliente -> nomeCliente.split(" ")[0])
-									.filter(primeiroNome -> nome.equalsIgnoreCase(primeiroNome)).findFirst()
-									.orElse(null);
+								/*
+								 * Função Lambda para filtrar o primeiro nome de cada objeto 'Cliente' da lista
+								 * 'clientes'.
+								 */
+								String primeiroNomeCliente = clientes.stream().map(Cliente::getNome)
+										.map(nomeCliente -> nomeCliente.split(" ")[0])
+										.filter(primeiroNome -> nome.equalsIgnoreCase(primeiroNome)).findFirst()
+										.orElse(null);
 
-							boolean compNome = nome.equalsIgnoreCase(primeiroNomeCliente);// Comparar só o primeiro nome
-							boolean compNomeCompleto = nome.equalsIgnoreCase(c.getNome());// Compara o nome todo
+								boolean compNome = nome.equalsIgnoreCase(primeiroNomeCliente);// Comparar só o primeiro
+																								// nome
+								boolean compNomeCompleto = nome.equalsIgnoreCase(c.getNome());// Compara o nome todo
 
-							if (compNome == true || compNomeCompleto == true) {
-								int idade = cliente.getIdade();
-								System.out.print("Digite o filme que quer comprar: ");
-								String nomeFilme = sc.nextLine();
-								for (Filme f : filmes) {
-									boolean compFilme = nomeFilme.equalsIgnoreCase(f.getNome());
-									if (compFilme == true) {
-										System.out.println(f);
-										if (f.getClassificacao() < idade) {
-											System.out.print("Deseja parcelar? (S/N) - ");
-											char parcelar = sc.next().charAt(0);
-											
-											cdv = new ContratoDeVenda(precoTotal, agora);
-											
-											if (parcelar == 'S' || parcelar == 's') {
-												System.out.println("Parcelar de quantos meses? ");
-												int parcelas = sc.nextInt();
-												System.out.println(
-														"Escolha o cartão: \n 1 - Nubank \n 2 - PicPay \n 3 - Caixa");
-												int op2 = sc.nextInt();
-												
-												switch (op2) {
-												case 1: {
-													pdv = new ProcessoDeVenda(new Nubank());
-													pdv.processarContrato(cdv, parcelas);
-													
-													for(Parcela p : cdv.getParcelas()) {
-														System.out.println(p);
+								if (compNome == true || compNomeCompleto == true) {
+									int idade = cliente.getIdade();
+									System.out.print("Digite o filme que quer comprar: ");
+									String nomeFilme = sc.nextLine();
+									for (Filme f : filmes) {
+										boolean compFilme = nomeFilme.equalsIgnoreCase(f.getNome());
+										if (compFilme == true) {
+											System.out.println(f);
+											if (f.getClassificacao() < idade) {
+												System.out.print("Deseja parcelar? (S/N) - ");
+												char parcelar = sc.next().charAt(0);
+
+												cdv = new ContratoDeVenda(precoTotal, agora);
+
+												if (parcelar == 'S' || parcelar == 's') {
+													System.out.println("Parcelar de quantos meses? ");
+													int parcelas = sc.nextInt();
+													System.out.println(
+															"Escolha o cartão: \n 1 - Nubank \n 2 - PicPay \n 3 - Caixa");
+													int op2 = sc.nextInt();
+
+													switch (op2) {
+													case 1: {
+														pdv = new ProcessoDeVenda(new Nubank());
+														pdv.processarContrato(cdv, parcelas);
+
+														for (Parcela p : cdv.getParcelas()) {
+															System.out.println(p);
+														}
+														break;
 													}
-													break;
-												}case 2 :{
-													pdv = new ProcessoDeVenda(new PicPay());
-													pdv.processarContrato(cdv, parcelas);
-													
-													for(Parcela p : cdv.getParcelas()) {
-														System.out.println(p);	
-												}
-													break;
-												}case 3 :{
-													pdv = new ProcessoDeVenda(new Caixa());
-													pdv.processarContrato(cdv, parcelas);
-													
-													for(Parcela p : cdv.getParcelas()) {
-														System.out.println(p);
-												}
-													break;
-													
-												} default :{
-													System.out.println("Opção inválida!");
-												}
-												}
+													case 2: {
+														pdv = new ProcessoDeVenda(new PicPay());
+														pdv.processarContrato(cdv, parcelas);
 
-										} else if (parcelar == 'N' || parcelar == 'n') {
-											System.out.println("Compra à vista!");
+														for (Parcela p : cdv.getParcelas()) {
+															System.out.println(p);
+														}
+														break;
+													}
+													case 3: {
+														pdv = new ProcessoDeVenda(new Caixa());
+														pdv.processarContrato(cdv, parcelas);
+
+														for (Parcela p : cdv.getParcelas()) {
+															System.out.println(p);
+														}
+														break;
+
+													}
+													default: {
+														System.out.println("Opção inválida!");
+													}
+													}
+
+												} else if (parcelar == 'N' || parcelar == 'n') {
+													System.out.println("Compra à vista!");
+												}
+											} else {
+												System.out.println("Idade inapropriada para o filme!");
+												System.out.println();
+												op1 = 3;
+											}
+
+											// Resolver problema dessa mensagem. Mesmo dando certo o if essa mensagem
+											// aparece.
+										} else if (compFilme == false) {
+											System.out.println("Filme inexistente!");
+											System.out.println();
+											op1 = 3;
 										}
-									} else {
-										System.out.println("Idade inapropriada para o filme!");
-										System.out.println();
-										op1 = 3;
-									}
-										
-										//Resolver problema dessa mensagem. Mesmo dando certo o if essa mensagem aparece.
-									}else {
-										System.out.println("Filme inexistente!");
-										System.out.println();
-										op1 = 3;
-									}
 									}
 
-							} else if (compNome == false || compNomeCompleto == false){
-								System.out.println("Cliente inexistente!");
-								System.out.println();
-								op1 = 3;
+								} else if (compNome == false || compNomeCompleto == false) {
+									System.out.println("Cliente inexistente!");
+									System.out.println();
+									op1 = 3;
+								}
+							}
+							//alugar filme
+						}else if (op1 == 2) {
+							System.out.println("--Alugar filme--");
+							System.out.print("Insira o nome do cliente: ");
+							String nome = sc.nextLine();
+							for (Cliente c : clientes) {
+
+								/*
+								 * Função Lambda para filtrar o primeiro nome de cada objeto 'Cliente' da lista
+								 * 'clientes'.
+								 */
+								String primeiroNomeCliente = clientes.stream().map(Cliente::getNome)
+										.map(nomeCliente -> nomeCliente.split(" ")[0])
+										.filter(primeiroNome -> nome.equalsIgnoreCase(primeiroNome)).findFirst()
+										.orElse(null);
+
+								boolean compNome = nome.equalsIgnoreCase(primeiroNomeCliente);// Comparar só o primeiro
+																								// nome
+								boolean compNomeCompleto = nome.equalsIgnoreCase(c.getNome());// Compara o nome todo
+
+								if (compNome == true || compNomeCompleto == true) {
+									int idade = cliente.getIdade();
+									System.out.print("Digite o filme que quer alugar: ");
+									String nomeFilme = sc.nextLine();
+									for (Filme f : filmes) {
+										boolean compFilme = nomeFilme.equalsIgnoreCase(f.getNome());
+										if (compFilme == true) {
+											System.out.println(f);
+											if (f.getClassificacao() < idade) {
+												System.out.print("Por quantos dias deseja alugar? ");
+												int alugar = sc.nextInt();
+
+												cdv = new ContratoDeVenda(precoTotal, agora);
+												
+												if(alugar < 2 || alugar > 7) {
+													throw new Excecao("Entrada de dias incorreto. Insira um valor entre dois dias e sete dias.");
+													}
+												
+												pdv = new ProcessoDeVenda();
+												pdv.processarAluguel(cdv, alugar);
+												double total = 0.0;
+												for(Aluguel a : cdv.getAluguel()) {
+													total += a.getQuantia();
+													System.out.println(a);
+												}
+												System.out.println("Total: " + String.format("%.2f", total));
+											
+											} else {
+												System.out.println("Idade inapropriada para o filme!");
+												System.out.println();
+												op1 = 3;
+											}
+
+											// Resolver problema dessa mensagem. Mesmo dando certo o if essa mensagem
+											// aparece.
+										} else if (compFilme == false) {
+											System.out.println("Filme inexistente!");
+											System.out.println();
+											op1 = 3;
+										}
+									}
+
+								} else if (compNome == false || compNomeCompleto == false) {
+									System.out.println("Cliente inexistente!");
+									System.out.println();
+									op1 = 3;
+								}
 							}
 						}
 					}
+					
+
 					// Consultar filme
 				} else if (op == 4) {
 					System.out.println("Lista dos filmes:");
 					for (Filme f : filmes) {
 						System.out.println(f);
 					}
-				}else if(op == 5) {
+				} else if (op == 5) {
 					System.out.println("Lista dos clientes:");
-					for(Cliente c : clientes) {
+					for (Cliente c : clientes) {
 						System.out.println(c);
 					}
 				}
@@ -249,6 +329,23 @@ public class Programa {
 				sc.nextLine();
 			} catch (ArrayIndexOutOfBoundsException e) {
 				System.out.println("Entrada de dados incorreta --- " + e.getMessage());
+				System.out.println("Pressione qualquer tecla para continuar!");
+				sc.nextLine();
+				op = 1;
+				System.out.println();
+			}catch(Excecao e) {
+				System.out.println(e.getMessage());
+				sc.nextLine();
+				op = 1;
+				System.out.println();
+			}catch(NullPointerException e) {
+				System.out.println(e.getMessage());
+				System.out.println("Pressione qualquer tecla para continuar!");
+				sc.nextLine();
+				op = 1;
+				System.out.println();
+			}catch(RuntimeException e) {
+				System.out.println(e.getMessage());
 				System.out.println("Pressione qualquer tecla para continuar!");
 				sc.nextLine();
 				op = 1;
