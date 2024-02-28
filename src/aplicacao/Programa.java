@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Locale;
 
 import java.util.Scanner;
+import java.util.Set;
+import java.util.TreeSet;
 
 import entidades.Cliente;
 import entidades.Endereco;
@@ -36,7 +38,7 @@ public class Programa {
 		Double precoTotal = null;
 
 		List<Filme> filmes = new ArrayList<>();
-		List<Cliente> clientes = new ArrayList<>();
+		Set<Cliente> clientes = new TreeSet<>();
 
 		// Menu
 		System.out.println("--Sistema da Locadora de Filmes IgaraTexas--");
@@ -87,8 +89,10 @@ public class Programa {
 					System.out.print("Sexo(M/F): ");
 					Character sexo = sc.next().charAt(0);
 					sc.nextLine();
+					
 					System.out.print("CPF: ");
 					String cpf = sc.nextLine();
+					
 					System.out.print("Celular: ");
 					String celular = sc.nextLine();
 					System.out.println();
@@ -313,10 +317,12 @@ public class Programa {
 					for (Filme f : filmes) {
 						System.out.println(f);
 					}
+					//Consultar cliente
 				} else if (op == 5) {
 					System.out.println("Lista dos clientes:");
 					for (Cliente c : clientes) {
 						System.out.println(c);
+						System.out.println("------------------");
 					}
 				}
 

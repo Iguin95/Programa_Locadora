@@ -3,7 +3,7 @@ package entidades;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Cliente {
+public class Cliente implements Comparable<Cliente>{
 	
 	private String nome;
 	private Integer idade;
@@ -95,6 +95,11 @@ public class Cliente {
 				+ "Sexo: " + sexoMF + "\n"
 				+ "CPF: " + cpf + "\n"
 				+ "Celular: " + celular;
+	}
+
+	@Override
+	public int compareTo(Cliente outro) {
+		return nome.toUpperCase().compareTo(outro.getNome().toUpperCase());
 	}
 
 
