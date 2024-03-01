@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Locale;
-
 import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeSet;
@@ -38,7 +37,10 @@ public class Programa {
 		Double precoTotal = null;
 
 		List<Filme> filmes = new ArrayList<>();
-		Set<Cliente> clientes = new TreeSet<>();
+		List<Cliente> clientes = new ArrayList<>();
+
+		// Set<Cliente> clientes = new TreeSet<>();
+		// Map<Cliente, Filme> mapa = new TreeMap<>();
 
 		// Menu
 		System.out.println("--Sistema da Locadora de Filmes IgaraTexas--");
@@ -89,15 +91,15 @@ public class Programa {
 					System.out.print("Sexo(M/F): ");
 					Character sexo = sc.next().charAt(0);
 					sc.nextLine();
-					
+
 					System.out.print("CPF: ");
 					String cpf = sc.nextLine();
-					
+
 					System.out.print("Celular: ");
 					String celular = sc.nextLine();
 					System.out.println();
 
-					cliente = new Cliente(nome, idade, sexo, cpf, celular);
+					// cliente = new Cliente(nome, idade, sexo, cpf, celular);
 
 					System.out.println("Endereço: ");
 					System.out.print("Rua ou Avenida: ");
@@ -116,6 +118,7 @@ public class Programa {
 					cliente = new Cliente(nome, idade, sexo, cpf, celular, end);
 
 					clientes.add(cliente);
+
 					// Cadastro de filme
 				} else if (op == 2) {
 					System.out.println("Cadastro de filme:");
@@ -124,7 +127,7 @@ public class Programa {
 					System.out.print("Classificação indicativa do filme: ");
 					Integer classificacao = sc.nextInt();
 
-					filme = new Filme(nome, classificacao);
+					// filme = new Filme(nome, classificacao);
 
 					System.out.print("Valor do filme: ");
 					precoTotal = sc.nextDouble();
@@ -145,34 +148,50 @@ public class Programa {
 							System.out.println("--Comprar filme--");
 							System.out.print("Insira o nome do cliente: ");
 							String nome = sc.nextLine();
+
 							for (Cliente c : clientes) {
 
 								/*
 								 * Função Lambda para filtrar o primeiro nome de cada objeto 'Cliente' da lista
 								 * 'clientes'.
+								 * 
+								 * 
+								 * String primeiroNomeCliente = clientes.stream().map(Cliente::getNome)
+								 * .map(nomeCliente -> nomeCliente.split(" ")[0]) .filter(primeiroNome ->
+								 * nome.equalsIgnoreCase(primeiroNome)).findFirst() .orElse(null);
 								 */
-								String primeiroNomeCliente = clientes.stream().map(Cliente::getNome)
-										.map(nomeCliente -> nomeCliente.split(" ")[0])
-										.filter(primeiroNome -> nome.equalsIgnoreCase(primeiroNome)).findFirst()
-										.orElse(null);
+								
+								//boolean compNome = nome.equalsIgnoreCase(primeiroNomeCliente);/*Comparar só o primeiro nome*/
+																								
+								//boolean compNomeCompleto = nome.equalsIgnoreCase(c.getNome());// Compara o nome todo
+								
+								boolean encontrado = false;
 
-								boolean compNome = nome.equalsIgnoreCase(primeiroNomeCliente);// Comparar só o primeiro
-																								// nome
-								boolean compNomeCompleto = nome.equalsIgnoreCase(c.getNome());// Compara o nome todo
+								System.out.print("Digite o filme que quer comprar: ");
+								String nomeFilme = sc.nextLine();
 
-								if (compNome == true || compNomeCompleto == true) {
-									int idade = cliente.getIdade();
-									System.out.print("Digite o filme que quer comprar: ");
-									String nomeFilme = sc.nextLine();
+								boolean compFilme = true;
+
+								if (nome.equalsIgnoreCase(c.getNome())) {
+									encontrado = true;
+									
+									int idade = c.getIdade();
+									
 									for (Filme f : filmes) {
-										boolean compFilme = nomeFilme.equalsIgnoreCase(f.getNome());
-										if (compFilme == true) {
+										compFilme = nomeFilme.equalsIgnoreCase(f.getNome());
+										if (compFilme) {
 											System.out.println(f);
+
 											if (f.getClassificacao() < idade) {
 												System.out.print("Deseja parcelar? (S/N) - ");
 												char parcelar = sc.next().charAt(0);
 
 												cdv = new ContratoDeVenda(precoTotal, agora);
+
+												// não está iterando
+												// c.getListFilme().add(new Filme(f.getNome(), f.getClassificacao()));
+												c.adicionarFilme(f);
+												// mapa.put(c, f);
 
 												if (parcelar == 'S' || parcelar == 's') {
 													System.out.println("Parcelar de quantos meses? ");
@@ -213,34 +232,40 @@ public class Programa {
 													default: {
 														System.out.println("Opção inválida!");
 													}
+
 													}
 
-												} else if (parcelar == 'N' || parcelar == 'n') {
-													System.out.println("Compra à vista!");
 												}
+												if (parcelar == 'N' || parcelar == 'n') {
+													System.out.println("Compra à vista!");
+													op1 = 3;
+												}
+
 											} else {
 												System.out.println("Idade inapropriada para o filme!");
 												System.out.println();
 												op1 = 3;
 											}
 
-											// Resolver problema dessa mensagem. Mesmo dando certo o if essa mensagem
-											// aparece.
-										} else if (compFilme == false) {
-											System.out.println("Filme inexistente!");
-											System.out.println();
-											op1 = 3;
 										}
+
 									}
 
-								} else if (compNome == false || compNomeCompleto == false) {
+								}
+								if (!compFilme) {
+									System.out.println("Filme inexistente!");
+									System.out.println();
+									op1 = 3;
+								}
+
+								if (!encontrado) {
 									System.out.println("Cliente inexistente!");
 									System.out.println();
 									op1 = 3;
 								}
 							}
-							//alugar filme
-						}else if (op1 == 2) {
+							// alugar filme
+						} else if (op1 == 2) {
 							System.out.println("--Alugar filme--");
 							System.out.print("Insira o nome do cliente: ");
 							String nome = sc.nextLine();
@@ -249,59 +274,73 @@ public class Programa {
 								/*
 								 * Função Lambda para filtrar o primeiro nome de cada objeto 'Cliente' da lista
 								 * 'clientes'.
-								 */
+								 
 								String primeiroNomeCliente = clientes.stream().map(Cliente::getNome)
 										.map(nomeCliente -> nomeCliente.split(" ")[0])
 										.filter(primeiroNome -> nome.equalsIgnoreCase(primeiroNome)).findFirst()
 										.orElse(null);
 
-								boolean compNome = nome.equalsIgnoreCase(primeiroNomeCliente);// Comparar só o primeiro
-																								// nome
-								boolean compNomeCompleto = nome.equalsIgnoreCase(c.getNome());// Compara o nome todo
-
-								if (compNome == true || compNomeCompleto == true) {
-									int idade = cliente.getIdade();
+								boolean compNome = nome.equalsIgnoreCase(primeiroNomeCliente);// Comparar só o primeiro nome*/
+								
+								//boolean compNomeCompleto = nome.equalsIgnoreCase(c.getNome());// Compara o nome todo
+								boolean compFilme = true;
+								boolean encontrado = false;
+								
+								if (nome.equalsIgnoreCase(c.getNome())) {
+									encontrado = true;
+									
+									int idade = c.getIdade();
+									
 									System.out.print("Digite o filme que quer alugar: ");
 									String nomeFilme = sc.nextLine();
+
 									for (Filme f : filmes) {
-										boolean compFilme = nomeFilme.equalsIgnoreCase(f.getNome());
+										compFilme = nomeFilme.equalsIgnoreCase(f.getNome());
+
 										if (compFilme == true) {
 											System.out.println(f);
-											if (f.getClassificacao() < idade) {
+											if (f.getClassificacao() <= idade) {
 												System.out.print("Por quantos dias deseja alugar? ");
 												int alugar = sc.nextInt();
 
 												cdv = new ContratoDeVenda(precoTotal, agora);
-												
-												if(alugar < 2 || alugar > 7) {
-													throw new Excecao("Entrada de dias incorreto. Insira um valor entre dois dias e sete dias.");
-													}
-												
+
+												// não está iterando
+												// c.getListFilme().add(new Filme(f.getNome(), f.getClassificacao()));
+												c.adicionarFilme(f);
+												// mapa.put(c, f);
+
+												if (alugar < 2 || alugar > 7) {
+													throw new Excecao(
+															"Entrada de dias incorreto. Insira um valor entre dois dias e sete dias.");
+												}
+
 												pdv = new ProcessoDeVenda();
 												pdv.processarAluguel(cdv, alugar);
 												double total = 0.0;
-												for(Aluguel a : cdv.getAluguel()) {
+												for (Aluguel a : cdv.getAluguel()) {
 													total += a.getQuantia();
 													System.out.println(a);
 												}
+
 												System.out.println("Total: " + String.format("%.2f", total));
-											
+
 											} else {
 												System.out.println("Idade inapropriada para o filme!");
 												System.out.println();
-												op1 = 3;
+												break;
 											}
 
-											// Resolver problema dessa mensagem. Mesmo dando certo o if essa mensagem
-											// aparece.
-										} else if (compFilme == false) {
+										}
+										if (!compFilme) {
 											System.out.println("Filme inexistente!");
 											System.out.println();
 											op1 = 3;
 										}
 									}
 
-								} else if (compNome == false || compNomeCompleto == false) {
+								} 
+								if(!encontrado){
 									System.out.println("Cliente inexistente!");
 									System.out.println();
 									op1 = 3;
@@ -309,7 +348,6 @@ public class Programa {
 							}
 						}
 					}
-					
 
 					// Consultar filme
 				} else if (op == 4) {
@@ -317,13 +355,15 @@ public class Programa {
 					for (Filme f : filmes) {
 						System.out.println(f);
 					}
-					//Consultar cliente
+					// Consultar cliente
 				} else if (op == 5) {
 					System.out.println("Lista dos clientes:");
 					for (Cliente c : clientes) {
 						System.out.println(c);
+						System.out.println("Filme em posse: " + c.getListFilme());
 						System.out.println("------------------");
 					}
+
 				}
 
 			} catch (InputMismatchException e) {
@@ -339,18 +379,18 @@ public class Programa {
 				sc.nextLine();
 				op = 1;
 				System.out.println();
-			}catch(Excecao e) {
+			} catch (Excecao e) {
 				System.out.println(e.getMessage());
 				sc.nextLine();
 				op = 1;
 				System.out.println();
-			}catch(NullPointerException e) {
+			} catch (NullPointerException e) {
 				System.out.println(e.getMessage());
 				System.out.println("Pressione qualquer tecla para continuar!");
 				sc.nextLine();
 				op = 1;
 				System.out.println();
-			}catch(RuntimeException e) {
+			} catch (RuntimeException e) {
 				System.out.println(e.getMessage());
 				System.out.println("Pressione qualquer tecla para continuar!");
 				sc.nextLine();

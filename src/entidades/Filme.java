@@ -12,6 +12,13 @@ public class Filme {
 	public Filme() {
 	}
 	
+
+	public Filme(String nome) {
+		super();
+		this.nome = nome;
+	}
+
+
 	public Filme(String nome, Integer classificacao, ContratoDeVenda contratoDeVenda) {
 		this.nome = nome;
 		this.classificacao = classificacao;
@@ -39,9 +46,10 @@ public class Filme {
 		this.classificacao = classificacao;
 	}
 
-	
+	@Override
 	public String toString() {
 		return nome + " -- Classificação indicativa: " + classificacao + " anos.";
 	}
+	
 
 }

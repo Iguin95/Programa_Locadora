@@ -12,7 +12,7 @@ public class Cliente implements Comparable<Cliente>{
 	private String celular;
 	
 	Endereco end = new Endereco();
-	List<Filme> list = new ArrayList<>();
+	List<Filme> listFilme = new ArrayList<>();
 	
 	public Cliente() {
 	}
@@ -71,8 +71,8 @@ public class Cliente implements Comparable<Cliente>{
 		this.end = end;
 	}
 
-	public List<Filme> getList() {
-		return list;
+	public List<Filme> getListFilme() {
+		return listFilme;
 	}
 
 	public String getCelular() {
@@ -82,6 +82,10 @@ public class Cliente implements Comparable<Cliente>{
 	public void setCelular(String celular) {
 		this.celular = celular;
 	}
+	
+	public void adicionarFilme(Filme filme) {
+        this.listFilme.add(filme);
+    }
 	
 	public String toString() {
 		String sexoMF = null;
