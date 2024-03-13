@@ -3,21 +3,21 @@ package entidades;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Cliente implements Comparable<Cliente>{
-	
+public class Cliente implements Comparable<Cliente> {
+
 	private String nome;
 	private Integer idade;
 	private Character sexo;
-	private String cpf;
+	private String[] cpf;
 	private String celular;
-	
+
 	Endereco end = new Endereco();
 	List<Filme> listFilme = new ArrayList<>();
-	
+
 	public Cliente() {
 	}
-	
-	public Cliente(String nome, Integer idade, Character sexo, String cpf,String celular) {
+
+	public Cliente(String nome, Integer idade, Character sexo, String[] cpf, String celular) {
 		this.nome = nome;
 		this.idade = idade;
 		this.sexo = sexo;
@@ -25,7 +25,7 @@ public class Cliente implements Comparable<Cliente>{
 		this.celular = celular;
 	}
 
-	public Cliente(String nome, Integer idade, Character sexo, String cpf, String celular, Endereco end) {
+	public Cliente(String nome, Integer idade, Character sexo, String[] cpf, String celular, Endereco end) {
 		this.nome = nome;
 		this.idade = idade;
 		this.sexo = sexo;
@@ -58,10 +58,13 @@ public class Cliente implements Comparable<Cliente>{
 		this.sexo = sexo;
 	}
 
-	public String getCpf() {
+	public String[] getCpf() {
 		return cpf;
 	}
 
+	public String[] setCpf(String[] cpf) {
+		return this.cpf = cpf;
+	}
 
 	public Endereco getEnd() {
 		return end;
@@ -82,22 +85,19 @@ public class Cliente implements Comparable<Cliente>{
 	public void setCelular(String celular) {
 		this.celular = celular;
 	}
-	
+
 	public void adicionarFilme(Filme filme) {
-        this.listFilme.add(filme);
-    }
-	
+		this.listFilme.add(filme);
+	}
+
 	public String toString() {
 		String sexoMF = null;
-		if(this.sexo == 'M' || this.sexo == 'm') {
+		if (this.sexo == 'M' || this.sexo == 'm') {
 			sexoMF = "Masculino";
-		}else if(this.sexo == 'F' || this.sexo == 'f') {
+		} else if (this.sexo == 'F' || this.sexo == 'f') {
 			sexoMF = "Feminino";
 		}
-		return "Nome: " + nome + "\n" 
-				+ "Idade: " + idade + " anos \n"
-				+ "Sexo: " + sexoMF + "\n"
-				+ "CPF: " + cpf + "\n"
+		return "Nome: " + nome + "\n" + "Idade: " + idade + " anos \n" + "Sexo: " + sexoMF + "\n" + "CPF: " + cpf + "\n"
 				+ "Celular: " + celular;
 	}
 
@@ -106,17 +106,55 @@ public class Cliente implements Comparable<Cliente>{
 		return nome.toUpperCase().compareTo(outro.getNome().toUpperCase());
 	}
 
+	public boolean validarCPF(String[] cpf) {
+		int cpf_novo[] = new int[12];
+		int x = 0, y = 0, TotalDigito1 = 0, TotalDigito2 = 0, Digito_Calculado, tamanho, Digito_usuario;
+		
+		System.out.print("Digite seu CPF: ");
+		setCpf(cpf);
+		tamanho = cpf.length;
 
-	
-	
-	
-	
+		while (x < tamanho) {
+			if (cpf[x] != "." && cpf[x] != "-") {
+				cpf_novo[y] = Integer.parseInt(cpf[x]);
+				y = y + 1;
+			}
+			x++;
+		}
+		x = 0;
 
+		while (x < 9) {
+			TotalDigito1 = TotalDigito1 + ((cpf_novo[x]) * (10 - x));
+			TotalDigito2 = TotalDigito2 + ((cpf_novo[x]) * (11 - x));
+			x++;
+		}
 
-	
-	
-	
-	
-	
+		TotalDigito1 = (TotalDigito1 * 10) % 11;
+		if (TotalDigito1 > 9) {
+			TotalDigito1 = 0;
+		}
+
+		TotalDigito2 = (TotalDigito2 + (TotalDigito1 * 2)) * 10 % 11;
+		if (TotalDigito2 > 9) {
+			TotalDigito2 = 0;
+		}
+
+		Digito_Calculado = (TotalDigito1 * 10) + TotalDigito2;
+		x = cpf_novo[9];
+		y = cpf_novo[10];
+
+		Digito_usuario = ((x) * 10) + (y);
+
+		if (tamanho == 11 || tamanho == 14) {
+			if (Digito_Calculado == Digito_usuario) {
+				System.out.println("CPF correto!");
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
 
 }

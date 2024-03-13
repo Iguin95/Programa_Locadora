@@ -7,8 +7,6 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
-import java.util.Set;
-import java.util.TreeSet;
 
 import entidades.Cliente;
 import entidades.Endereco;
@@ -23,6 +21,15 @@ import serviço.PicPay;
 import serviço.ProcessoDeVenda;
 
 public class Programa {
+	
+	//faça com que cada cliente tenha um id para identifica-lo mais facilmente
+	
+	private static final int CADASTRAR_CLIENTE = 1;
+    private static final int CADASTRAR_FILME = 2;
+    private static final int VENDA_ALUGUEL = 3;
+    private static final int CONSULTAR_FILME = 4;
+    private static final int CONSULTAR_CLIENTE = 5;
+    private static final int SAIR = 6;
 
 	public static void main(String[] args) {
 		Locale.setDefault(Locale.US);
@@ -48,7 +55,7 @@ public class Programa {
 		int op = 0;
 		System.out.println();
 
-		while (op != 6) {
+		while (op != SAIR ) {
 			System.out.println("                   MENU");
 			System.out.println("______________________________________________");
 			System.out.println();
@@ -61,7 +68,7 @@ public class Programa {
 				System.out.println();
 				sc.nextLine();
 				// Cadastro de cliente
-				if (op == 1) {
+				if (op == CADASTRAR_CLIENTE) {
 					System.out.println("Cadastro de Cliente: ");
 					System.out.print("Nome: ");
 					String nome = sc.nextLine();
@@ -120,7 +127,7 @@ public class Programa {
 					clientes.add(cliente);
 
 					// Cadastro de filme
-				} else if (op == 2) {
+				} else if (op == CADASTRAR_FILME) {
 					System.out.println("Cadastro de filme:");
 					System.out.print("Nome: ");
 					String nome = sc.nextLine();
@@ -138,7 +145,7 @@ public class Programa {
 					filmes.add(filme);
 
 					// Venda/Aluguel
-				} else if (op == 3) {
+				} else if (op == VENDA_ALUGUEL) {
 					System.out.println("Venda ou aluguel de filme:");
 					System.out.println(" 1 - Comprar; \n 2 - Alugar; \n 3 - Voltar ");
 					int op1 = sc.nextInt();
@@ -190,8 +197,10 @@ public class Programa {
 
 												// não está iterando
 												// c.getListFilme().add(new Filme(f.getNome(), f.getClassificacao()));
-												c.adicionarFilme(f);
+												
 												// mapa.put(c, f);
+												
+												c.adicionarFilme(f);
 
 												if (parcelar == 'S' || parcelar == 's') {
 													System.out.println("Parcelar de quantos meses? ");
@@ -307,8 +316,10 @@ public class Programa {
 
 												// não está iterando
 												// c.getListFilme().add(new Filme(f.getNome(), f.getClassificacao()));
-												c.adicionarFilme(f);
+												
 												// mapa.put(c, f);
+												
+												c.adicionarFilme(f);
 
 												if (alugar < 2 || alugar > 7) {
 													throw new Excecao(
@@ -328,7 +339,7 @@ public class Programa {
 											} else {
 												System.out.println("Idade inapropriada para o filme!");
 												System.out.println();
-												break;
+												op1 = 3;
 											}
 
 										}
@@ -350,13 +361,13 @@ public class Programa {
 					}
 
 					// Consultar filme
-				} else if (op == 4) {
+				} else if (op == CONSULTAR_FILME) {
 					System.out.println("Lista dos filmes:");
 					for (Filme f : filmes) {
 						System.out.println(f);
 					}
 					// Consultar cliente
-				} else if (op == 5) {
+				} else if (op == CONSULTAR_CLIENTE) {
 					System.out.println("Lista dos clientes:");
 					for (Cliente c : clientes) {
 						System.out.println(c);
