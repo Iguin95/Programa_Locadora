@@ -68,10 +68,15 @@ public class Programa {
 				System.out.println();
 				sc.nextLine();
 				// Cadastro de cliente
+				
 				if (op == CADASTRAR_CLIENTE) {
 					System.out.println("Cadastro de Cliente: ");
 					System.out.print("Nome: ");
 					String nome = sc.nextLine();
+					
+					/*for(int i = 0;i <= nome.length; i++) {
+						nome[i] = ;
+					}*/
 
 					if (nome.length() < 7) {
 						int nomepeq = 0;
@@ -79,6 +84,11 @@ public class Programa {
 							System.out.println("Nome inválido");
 							System.out.print("Nome: ");
 							nome = sc.nextLine();
+							
+							/*for(int i = 0;i <= nome.length; i++) {
+								nome[i] = sc.nextLine();
+							}*/
+							
 							if (nome.length() >= 8) {
 								nomepeq = 1;
 							}
@@ -100,8 +110,14 @@ public class Programa {
 					sc.nextLine();
 
 					System.out.print("CPF: ");
-					String cpf = sc.nextLine();
-
+					Character cpf[] = new Character[15];
+					
+					for(int i = 0;i < cpf.length; i++) {
+						cpf[i] = sc.next().charAt(i);
+					}
+					
+					if(cliente.validarCPF(cpf) == true) {
+					
 					System.out.print("Celular: ");
 					String celular = sc.nextLine();
 					System.out.println();
@@ -125,6 +141,10 @@ public class Programa {
 					cliente = new Cliente(nome, idade, sexo, cpf, celular, end);
 
 					clientes.add(cliente);
+					}else if(!cliente.validarCPF(cpf)) {
+						System.out.println("CPF inválido!!");
+						continue;
+					}
 
 					// Cadastro de filme
 				} else if (op == CADASTRAR_FILME) {
@@ -155,6 +175,10 @@ public class Programa {
 							System.out.println("--Comprar filme--");
 							System.out.print("Insira o nome do cliente: ");
 							String nome = sc.nextLine();
+							
+							/*for(int i = 0;i <= nome.length; i++) {
+								nome[i] = sc.nextLine();
+							}*/
 
 							for (Cliente c : clientes) {
 
@@ -178,7 +202,7 @@ public class Programa {
 								String nomeFilme = sc.nextLine();
 
 								boolean compFilme = true;
-
+								
 								if (nome.equalsIgnoreCase(c.getNome())) {
 									encontrado = true;
 									
@@ -261,6 +285,7 @@ public class Programa {
 									}
 
 								}
+							
 								if (!compFilme) {
 									System.out.println("Filme inexistente!");
 									System.out.println();

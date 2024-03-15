@@ -8,7 +8,7 @@ public class Cliente implements Comparable<Cliente> {
 	private String nome;
 	private Integer idade;
 	private Character sexo;
-	private String[] cpf;
+	private Character[] cpf = new Character[15];
 	private String celular;
 
 	Endereco end = new Endereco();
@@ -17,7 +17,7 @@ public class Cliente implements Comparable<Cliente> {
 	public Cliente() {
 	}
 
-	public Cliente(String nome, Integer idade, Character sexo, String[] cpf, String celular) {
+	public Cliente(String nome, Integer idade, Character sexo, Character[] cpf, String celular) {
 		this.nome = nome;
 		this.idade = idade;
 		this.sexo = sexo;
@@ -25,7 +25,7 @@ public class Cliente implements Comparable<Cliente> {
 		this.celular = celular;
 	}
 
-	public Cliente(String nome, Integer idade, Character sexo, String[] cpf, String celular, Endereco end) {
+	public Cliente(String nome, Integer idade, Character sexo, Character[] cpf, String celular, Endereco end) {
 		this.nome = nome;
 		this.idade = idade;
 		this.sexo = sexo;
@@ -58,11 +58,11 @@ public class Cliente implements Comparable<Cliente> {
 		this.sexo = sexo;
 	}
 
-	public String[] getCpf() {
+	public Character[] getCpf() {
 		return cpf;
 	}
 
-	public String[] setCpf(String[] cpf) {
+	public Character[] setCpf(Character[] cpf) {
 		return this.cpf = cpf;
 	}
 
@@ -106,7 +106,7 @@ public class Cliente implements Comparable<Cliente> {
 		return nome.toUpperCase().compareTo(outro.getNome().toUpperCase());
 	}
 
-	public boolean validarCPF(String[] cpf) {
+	public boolean validarCPF(Character[] cpf) {
 		int cpf_novo[] = new int[12];
 		int x = 0, y = 0, TotalDigito1 = 0, TotalDigito2 = 0, Digito_Calculado, tamanho, Digito_usuario;
 		
@@ -115,8 +115,8 @@ public class Cliente implements Comparable<Cliente> {
 		tamanho = cpf.length;
 
 		while (x < tamanho) {
-			if (cpf[x] != "." && cpf[x] != "-") {
-				cpf_novo[y] = Integer.parseInt(cpf[x]);
+			if (cpf[x] != '.' && cpf[x] != '-') {
+				cpf_novo[y] = Integer.parseInt(Character.toString(cpf[x]));
 				y = y + 1;
 			}
 			x++;
