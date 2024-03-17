@@ -1,6 +1,7 @@
 package entidades;
 
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 
 public class Cliente implements Comparable<Cliente> {
@@ -8,7 +9,7 @@ public class Cliente implements Comparable<Cliente> {
 	private String nome;
 	private Integer idade;
 	private Character sexo;
-	private Character[] cpf = new Character[15];
+	private String CPF;
 	private String celular;
 
 	Endereco end = new Endereco();
@@ -17,19 +18,19 @@ public class Cliente implements Comparable<Cliente> {
 	public Cliente() {
 	}
 
-	public Cliente(String nome, Integer idade, Character sexo, Character[] cpf, String celular) {
+	public Cliente(String nome, Integer idade, Character sexo, String cpf, String celular) {
 		this.nome = nome;
 		this.idade = idade;
 		this.sexo = sexo;
-		this.cpf = cpf;
+		this.CPF = cpf;
 		this.celular = celular;
 	}
 
-	public Cliente(String nome, Integer idade, Character sexo, Character[] cpf, String celular, Endereco end) {
+	public Cliente(String nome, Integer idade, Character sexo, String cpf, String celular, Endereco end) {
 		this.nome = nome;
 		this.idade = idade;
 		this.sexo = sexo;
-		this.cpf = cpf;
+		this.CPF = cpf;
 		this.end = end;
 		this.celular = celular;
 	}
@@ -58,12 +59,8 @@ public class Cliente implements Comparable<Cliente> {
 		this.sexo = sexo;
 	}
 
-	public Character[] getCpf() {
-		return cpf;
-	}
-
-	public Character[] setCpf(Character[] cpf) {
-		return this.cpf = cpf;
+	public String getCpf() {
+		return CPF;
 	}
 
 	public Endereco getEnd() {
@@ -90,6 +87,68 @@ public class Cliente implements Comparable<Cliente> {
 		this.listFilme.add(filme);
 	}
 
+	@Override
+	public int compareTo(Cliente outro) {
+		return nome.toUpperCase().compareTo(outro.getNome().toUpperCase());
+	}
+
+	public static boolean validarCPF(String CPF) {
+		// considera-se erro CPF"s formados por uma sequência de números iguais
+		if (CPF.equals("00000000000") || CPF.equals("11111111111") || CPF.equals("22222222222")
+				|| CPF.equals("33333333333") || CPF.equals("44444444444") || CPF.equals("55555555555")
+				|| CPF.equals("66666666666") || CPF.equals("77777777777") || CPF.equals("88888888888")
+				|| CPF.equals("99999999999") || (CPF.length() != 11))
+			return (false);
+
+		char dig10, dig11;
+		int sm, i, r, num, peso;
+
+		// "try" - protege o código para eventuais erros de conversao de tipo (int)
+		try {
+			// Cálculo do 1° Digito Verificador
+			sm = 0;
+			peso = 10;
+			for (i = 0; i < 9; i++) {
+				// converte o i-esimo caractere do CPF em um numero:
+				// por exemplo, transforma o caractere "0" no inteiro 0
+				// (48 eh a posicao de "0" na tabela ASCII)
+				num = (int) (CPF.charAt(i) - 48);
+				sm = sm + (num * peso);
+				peso = peso - 1;
+			}
+
+			r = 11 - (sm % 11);
+			if ((r == 10) || (r == 11))
+				dig10 = '0';
+			else
+				dig10 = (char) (r + 48); // converte no respectivo caractere numerico
+
+			// Cálculo do 2° Digito Verificador
+			sm = 0;
+			peso = 11;
+			for (i = 0; i < 10; i++) {
+				num = (int) (CPF.charAt(i) - 48);
+				sm = sm + (num * peso);
+				peso = peso - 1;
+			}
+
+			r = 11 - (sm % 11);
+			if ((r == 10) || (r == 11))
+				dig11 = '0';
+			else
+				dig11 = (char) (r + 48);
+
+			// Verifica se os digitos calculados conferem com os digitos informados.
+			if ((dig10 == CPF.charAt(9)) && (dig11 == CPF.charAt(10)))
+				return (true);
+			else
+				return (false);
+		} catch (InputMismatchException erro) {
+			return (false);
+		}
+	}
+
+
 	public String toString() {
 		String sexoMF = null;
 		if (this.sexo == 'M' || this.sexo == 'm') {
@@ -97,64 +156,8 @@ public class Cliente implements Comparable<Cliente> {
 		} else if (this.sexo == 'F' || this.sexo == 'f') {
 			sexoMF = "Feminino";
 		}
-		return "Nome: " + nome + "\n" + "Idade: " + idade + " anos \n" + "Sexo: " + sexoMF + "\n" + "CPF: " + cpf + "\n"
-				+ "Celular: " + celular;
+		return "Nome: " + nome + "\n" + "Idade: " + idade + " anos \n" + "Sexo: " + sexoMF + "\n" + "CPF: "
+				+ CPF.substring(0, 3) + "." + CPF.substring(3, 6) + "." + CPF.substring(6, 9) + "-"
+				+ CPF.substring(9, 11) + "\n" + "Celular: " + celular;
 	}
-
-	@Override
-	public int compareTo(Cliente outro) {
-		return nome.toUpperCase().compareTo(outro.getNome().toUpperCase());
-	}
-
-	public boolean validarCPF(Character[] cpf) {
-		int cpf_novo[] = new int[12];
-		int x = 0, y = 0, TotalDigito1 = 0, TotalDigito2 = 0, Digito_Calculado, tamanho, Digito_usuario;
-		
-		System.out.print("Digite seu CPF: ");
-		setCpf(cpf);
-		tamanho = cpf.length;
-
-		while (x < tamanho) {
-			if (cpf[x] != '.' && cpf[x] != '-') {
-				cpf_novo[y] = Integer.parseInt(Character.toString(cpf[x]));
-				y = y + 1;
-			}
-			x++;
-		}
-		x = 0;
-
-		while (x < 9) {
-			TotalDigito1 = TotalDigito1 + ((cpf_novo[x]) * (10 - x));
-			TotalDigito2 = TotalDigito2 + ((cpf_novo[x]) * (11 - x));
-			x++;
-		}
-
-		TotalDigito1 = (TotalDigito1 * 10) % 11;
-		if (TotalDigito1 > 9) {
-			TotalDigito1 = 0;
-		}
-
-		TotalDigito2 = (TotalDigito2 + (TotalDigito1 * 2)) * 10 % 11;
-		if (TotalDigito2 > 9) {
-			TotalDigito2 = 0;
-		}
-
-		Digito_Calculado = (TotalDigito1 * 10) + TotalDigito2;
-		x = cpf_novo[9];
-		y = cpf_novo[10];
-
-		Digito_usuario = ((x) * 10) + (y);
-
-		if (tamanho == 11 || tamanho == 14) {
-			if (Digito_Calculado == Digito_usuario) {
-				System.out.println("CPF correto!");
-				return true;
-			} else {
-				return false;
-			}
-		} else {
-			return false;
-		}
-	}
-
 }

@@ -21,15 +21,15 @@ import serviço.PicPay;
 import serviço.ProcessoDeVenda;
 
 public class Programa {
-	
-	//faça com que cada cliente tenha um id para identifica-lo mais facilmente
-	
+
+	// faça com que cada cliente tenha um id para identifica-lo mais facilmente
+
 	private static final int CADASTRAR_CLIENTE = 1;
-    private static final int CADASTRAR_FILME = 2;
-    private static final int VENDA_ALUGUEL = 3;
-    private static final int CONSULTAR_FILME = 4;
-    private static final int CONSULTAR_CLIENTE = 5;
-    private static final int SAIR = 6;
+	private static final int CADASTRAR_FILME = 2;
+	private static final int VENDA_ALUGUEL = 3;
+	private static final int CONSULTAR_FILME = 4;
+	private static final int CONSULTAR_CLIENTE = 5;
+	private static final int SAIR = 6;
 
 	public static void main(String[] args) {
 		Locale.setDefault(Locale.US);
@@ -46,16 +46,13 @@ public class Programa {
 		List<Filme> filmes = new ArrayList<>();
 		List<Cliente> clientes = new ArrayList<>();
 
-		// Set<Cliente> clientes = new TreeSet<>();
-		// Map<Cliente, Filme> mapa = new TreeMap<>();
-
 		// Menu
 		System.out.println("--Sistema da Locadora de Filmes IgaraTexas--");
 		System.out.println("______________________________________________");
 		int op = 0;
 		System.out.println();
 
-		while (op != SAIR ) {
+		while (op != SAIR) {
 			System.out.println("                   MENU");
 			System.out.println("______________________________________________");
 			System.out.println();
@@ -68,15 +65,11 @@ public class Programa {
 				System.out.println();
 				sc.nextLine();
 				// Cadastro de cliente
-				
+
 				if (op == CADASTRAR_CLIENTE) {
 					System.out.println("Cadastro de Cliente: ");
 					System.out.print("Nome: ");
 					String nome = sc.nextLine();
-					
-					/*for(int i = 0;i <= nome.length; i++) {
-						nome[i] = ;
-					}*/
 
 					if (nome.length() < 7) {
 						int nomepeq = 0;
@@ -84,11 +77,7 @@ public class Programa {
 							System.out.println("Nome inválido");
 							System.out.print("Nome: ");
 							nome = sc.nextLine();
-							
-							/*for(int i = 0;i <= nome.length; i++) {
-								nome[i] = sc.nextLine();
-							}*/
-							
+
 							if (nome.length() >= 8) {
 								nomepeq = 1;
 							}
@@ -110,38 +99,32 @@ public class Programa {
 					sc.nextLine();
 
 					System.out.print("CPF: ");
-					Character cpf[] = new Character[15];
-					
-					for(int i = 0;i < cpf.length; i++) {
-						cpf[i] = sc.next().charAt(i);
-					}
-					
-					if(cliente.validarCPF(cpf) == true) {
-					
-					System.out.print("Celular: ");
-					String celular = sc.nextLine();
-					System.out.println();
+					String cpf = sc.nextLine();
 
-					// cliente = new Cliente(nome, idade, sexo, cpf, celular);
+					if (Cliente.validarCPF(cpf) == true) {
 
-					System.out.println("Endereço: ");
-					System.out.print("Rua ou Avenida: ");
-					String ruaAvenida = sc.nextLine();
-					System.out.print("Cidade: ");
-					String cidade = sc.nextLine();
-					System.out.print("Estado: ");
-					String uf = sc.nextLine();
-					System.out.print("Número da casa: ");
-					Integer numeroCasa = sc.nextInt();
-					sc.nextLine();
-					System.out.println();
+						System.out.print("Celular: ");
+						String celular = sc.nextLine();
+						System.out.println();
 
-					Endereco end = new Endereco(ruaAvenida, cidade, uf, numeroCasa);
+						System.out.println("Endereço: ");
+						System.out.print("Rua ou Avenida: ");
+						String ruaAvenida = sc.nextLine();
+						System.out.print("Cidade: ");
+						String cidade = sc.nextLine();
+						System.out.print("Estado: ");
+						String uf = sc.nextLine();
+						System.out.print("Número da casa: ");
+						Integer numeroCasa = sc.nextInt();
+						sc.nextLine();
+						System.out.println();
 
-					cliente = new Cliente(nome, idade, sexo, cpf, celular, end);
+						Endereco end = new Endereco(ruaAvenida, cidade, uf, numeroCasa);
 
-					clientes.add(cliente);
-					}else if(!cliente.validarCPF(cpf)) {
+						cliente = new Cliente(nome, idade, sexo, cpf, celular, end);
+
+						clientes.add(cliente);
+					} else if (!Cliente.validarCPF(cpf)) {
 						System.out.println("CPF inválido!!");
 						continue;
 					}
@@ -153,8 +136,6 @@ public class Programa {
 					String nome = sc.nextLine();
 					System.out.print("Classificação indicativa do filme: ");
 					Integer classificacao = sc.nextInt();
-
-					// filme = new Filme(nome, classificacao);
 
 					System.out.print("Valor do filme: ");
 					precoTotal = sc.nextDouble();
@@ -175,39 +156,27 @@ public class Programa {
 							System.out.println("--Comprar filme--");
 							System.out.print("Insira o nome do cliente: ");
 							String nome = sc.nextLine();
-							
-							/*for(int i = 0;i <= nome.length; i++) {
-								nome[i] = sc.nextLine();
-							}*/
 
 							for (Cliente c : clientes) {
 
-								/*
-								 * Função Lambda para filtrar o primeiro nome de cada objeto 'Cliente' da lista
-								 * 'clientes'.
-								 * 
-								 * 
-								 * String primeiroNomeCliente = clientes.stream().map(Cliente::getNome)
-								 * .map(nomeCliente -> nomeCliente.split(" ")[0]) .filter(primeiroNome ->
-								 * nome.equalsIgnoreCase(primeiroNome)).findFirst() .orElse(null);
-								 */
-								
-								//boolean compNome = nome.equalsIgnoreCase(primeiroNomeCliente);/*Comparar só o primeiro nome*/
-																								
-								//boolean compNomeCompleto = nome.equalsIgnoreCase(c.getNome());// Compara o nome todo
-								
+								// boolean compNome = nome.equalsIgnoreCase(primeiroNomeCliente);/*Comparar só o
+								// primeiro nome*/
+
+								// boolean compNomeCompleto = nome.equalsIgnoreCase(c.getNome());// Compara o
+								// nome todo
+
 								boolean encontrado = false;
 
 								System.out.print("Digite o filme que quer comprar: ");
 								String nomeFilme = sc.nextLine();
 
 								boolean compFilme = true;
-								
+
 								if (nome.equalsIgnoreCase(c.getNome())) {
 									encontrado = true;
-									
+
 									int idade = c.getIdade();
-									
+
 									for (Filme f : filmes) {
 										compFilme = nomeFilme.equalsIgnoreCase(f.getNome());
 										if (compFilme) {
@@ -219,11 +188,6 @@ public class Programa {
 
 												cdv = new ContratoDeVenda(precoTotal, agora);
 
-												// não está iterando
-												// c.getListFilme().add(new Filme(f.getNome(), f.getClassificacao()));
-												
-												// mapa.put(c, f);
-												
 												c.adicionarFilme(f);
 
 												if (parcelar == 'S' || parcelar == 's') {
@@ -285,7 +249,7 @@ public class Programa {
 									}
 
 								}
-							
+
 								if (!compFilme) {
 									System.out.println("Filme inexistente!");
 									System.out.println();
@@ -305,26 +269,16 @@ public class Programa {
 							String nome = sc.nextLine();
 							for (Cliente c : clientes) {
 
-								/*
-								 * Função Lambda para filtrar o primeiro nome de cada objeto 'Cliente' da lista
-								 * 'clientes'.
-								 
-								String primeiroNomeCliente = clientes.stream().map(Cliente::getNome)
-										.map(nomeCliente -> nomeCliente.split(" ")[0])
-										.filter(primeiroNome -> nome.equalsIgnoreCase(primeiroNome)).findFirst()
-										.orElse(null);
-
-								boolean compNome = nome.equalsIgnoreCase(primeiroNomeCliente);// Comparar só o primeiro nome*/
-								
-								//boolean compNomeCompleto = nome.equalsIgnoreCase(c.getNome());// Compara o nome todo
+								// boolean compNomeCompleto = nome.equalsIgnoreCase(c.getNome());// Compara o
+								// nome todo
 								boolean compFilme = true;
 								boolean encontrado = false;
-								
+
 								if (nome.equalsIgnoreCase(c.getNome())) {
 									encontrado = true;
-									
+
 									int idade = c.getIdade();
-									
+
 									System.out.print("Digite o filme que quer alugar: ");
 									String nomeFilme = sc.nextLine();
 
@@ -339,11 +293,6 @@ public class Programa {
 
 												cdv = new ContratoDeVenda(precoTotal, agora);
 
-												// não está iterando
-												// c.getListFilme().add(new Filme(f.getNome(), f.getClassificacao()));
-												
-												// mapa.put(c, f);
-												
 												c.adicionarFilme(f);
 
 												if (alugar < 2 || alugar > 7) {
@@ -375,8 +324,8 @@ public class Programa {
 										}
 									}
 
-								} 
-								if(!encontrado){
+								}
+								if (!encontrado) {
 									System.out.println("Cliente inexistente!");
 									System.out.println();
 									op1 = 3;
@@ -439,5 +388,6 @@ public class Programa {
 		sc.close();
 
 	}
+
 
 }
