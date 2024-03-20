@@ -55,6 +55,5 @@ public class ContratoDeVenda {
 		return aluguel;
 	}
 
-	
 
 }

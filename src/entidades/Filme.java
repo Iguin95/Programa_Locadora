@@ -45,10 +45,28 @@ public class Filme {
 	public void setClassificacao(Integer classificacao) {
 		this.classificacao = classificacao;
 	}
+	/* public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Cliente: ")
+          .append("Nome: ").append(nome)
+          .append(", Idade: ").append(idade)
+          .append(", Sexo: ").append(sexo);
+        return sb.toString();
+    }*/
 
-	@Override
+
 	public String toString() {
-		return nome + " -- Classificação indicativa: " + classificacao + " anos.";
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append(nome)
+		.append(" -- Classificação indicativa: ")
+		.append(classificacao)
+		.append(" anos.")
+		.append("Preço total: R$")
+		.append(String.format("%.2f", contratoDeVenda.getPrecoTotal()))
+		.append("\n");
+		
+		return sb.toString();
 	}
 	
 

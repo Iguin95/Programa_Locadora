@@ -35,7 +35,7 @@ public class ProcessoDeVenda {
 		}
 	}
 	
-	public double atrasoNaDevolução(ContratoDeVenda contrato, int diasAtrasados) {
+	public double atrasoNaDevolução(ContratoDeVenda contrato, long diasAtrasados) {
 		return contrato.getPrecoTotal() * Math.pow(1 + 0.01, diasAtrasados);
 	}
 	

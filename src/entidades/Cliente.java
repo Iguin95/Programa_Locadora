@@ -6,6 +6,8 @@ import java.util.List;
 
 public class Cliente implements Comparable<Cliente> {
 
+	private int id;
+	
 	private String nome;
 	private Integer idade;
 	private Character sexo;
@@ -18,21 +20,14 @@ public class Cliente implements Comparable<Cliente> {
 	public Cliente() {
 	}
 
-	public Cliente(String nome, Integer idade, Character sexo, String cpf, String celular) {
+	public Cliente(int id, String nome, Integer idade, Character sexo, String cPF, String celular, Endereco end) {
+		this.id = id;
 		this.nome = nome;
 		this.idade = idade;
 		this.sexo = sexo;
-		this.CPF = cpf;
+		CPF = cPF;
 		this.celular = celular;
-	}
-
-	public Cliente(String nome, Integer idade, Character sexo, String cpf, String celular, Endereco end) {
-		this.nome = nome;
-		this.idade = idade;
-		this.sexo = sexo;
-		this.CPF = cpf;
 		this.end = end;
-		this.celular = celular;
 	}
 
 	public String getNome() {
@@ -83,6 +78,10 @@ public class Cliente implements Comparable<Cliente> {
 		this.celular = celular;
 	}
 
+	public int getId() {
+		return id;
+	}
+
 	public void adicionarFilme(Filme filme) {
 		this.listFilme.add(filme);
 	}
@@ -91,6 +90,27 @@ public class Cliente implements Comparable<Cliente> {
 	public int compareTo(Cliente outro) {
 		return nome.toUpperCase().compareTo(outro.getNome().toUpperCase());
 	}
+
+	/*
+	 * CPF possui 11 dígitos
+	 * 
+	 * Multiplica-se os 9 primeiros dígitos pela sequência decrescente de números de
+	 * 10 à 2 e soma os resultados obtidos
+	 * 
+	 * Multiplica-se o resultado acima por 10 e divide por 11, o resto da divisão é
+	 * o penúltimo número do CPF (caso o resto seja 10, o resultado se torna 0).
+	 * Logo se o número calculado for diferente do penúltimo número, o CPF é
+	 * inválido.
+	 * 
+	 * Caso o primeiro dígito seja igual, multiplica-se os 10 primeiros dígitos pela
+	 * sequência decrescente de números de 11
+	 * 
+	 * Multiplica-se a soma feita acima por 10
+	 * 
+	 * Verificamos se o resto da divisão da multiplicação acima por 11 é igual ao
+	 * segundo dígito, se for, o CPF é válido.
+	 * 
+	 */
 
 	public static boolean validarCPF(String CPF) {
 		// considera-se erro CPF"s formados por uma sequência de números iguais
@@ -148,7 +168,6 @@ public class Cliente implements Comparable<Cliente> {
 		}
 	}
 
-
 	public String toString() {
 		String sexoMF = null;
 		if (this.sexo == 'M' || this.sexo == 'm') {
@@ -156,7 +175,7 @@ public class Cliente implements Comparable<Cliente> {
 		} else if (this.sexo == 'F' || this.sexo == 'f') {
 			sexoMF = "Feminino";
 		}
-		return "Nome: " + nome + "\n" + "Idade: " + idade + " anos \n" + "Sexo: " + sexoMF + "\n" + "CPF: "
+		return "ID: " + id + "\nNome: " + nome + "\n" + "Idade: " + idade + " anos \n" + "Sexo: " + sexoMF + "\n" + "CPF: "
 				+ CPF.substring(0, 3) + "." + CPF.substring(3, 6) + "." + CPF.substring(6, 9) + "-"
 				+ CPF.substring(9, 11) + "\n" + "Celular: " + celular;
 	}
